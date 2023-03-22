@@ -1,0 +1,628 @@
+openapi: 3.0.0
+info:
+  title: EcamAir API
+  description: Hello
+  version: '0.1'
+paths:
+  /user:
+    post:
+      summary: Create a new user
+      requestBody:
+        description: User object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '405':
+          description: Invalid input
+  /user/{user_id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '404':
+          description: User not found
+    put:
+      summary: Update an existing user
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: User object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '404':
+          description: User not found
+        '405':
+          description: Invalid input
+    delete:
+      summary: Delete a user
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: User deleted
+        '404':
+          description: User not found
+  /login:
+    post:
+      summary: Login a user
+      requestBody:
+        description: User object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User logged in
+        '404':
+          description: User not found
+        '405':
+          description: Invalid input
+  /user/{user_id}/humeur:
+    get:
+      summary: Get a user's mood
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Mood found
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+        '404':
+          description: Mood not found
+  /user/{user_id}/events:
+    get:
+      summary: Get a user's today's events
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Events found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventWID'
+        '404':
+          description: Events not found
+    post:
+      summary: Create a new event
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Event object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Event'
+      responses:
+        '200':
+          description: Event created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWID'
+        '405':
+          description: Invalid input
+  /user/{user_id}/add:
+    post:
+      summary: Add a friend identified by his ID in requestBody
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: ID of friend to add
+        required: true
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+      responses:
+        '200':
+          description: Friend added
+        '404':
+          description: Friend not found
+        '405':
+          description: Invalid input
+  /user/{user_id}/friends:
+    get:
+      summary: Get a user's friends
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Friends found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWID'
+        '404':
+          description: user not found
+  /user/{user_id}/LastEvent:
+    get:
+      summary: Get a user's last event
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Event found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventWID'
+        '404':
+          description: Event not found
+  /user/{user_id}/events/{date}:
+    get:
+      summary: Get a user's events of a specific date
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: date
+          in: path
+          description: Date of events to return
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Events found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventWID'
+        '404':
+          description: Events not found
+  /user/{user_id}/templates:
+    post:
+      summary: Create a new template
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Template object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventTemplate'
+      responses:
+        '200':
+          description: Template created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventTemplateWID'
+        '405':
+          description: Invalid input
+  /user/{user_id}/templates/{template_id}:
+    get:
+      summary: Get a template
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: template_id
+          in: path
+          description: ID of template
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Template found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventTemplateWID'
+        '404':
+          description: Template not found
+    put:
+      summary: Update a template
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: template_id
+          in: path
+          description: ID of template
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Template object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventTemplate'
+      responses:
+        '200':
+          description: Template updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventTemplateWID'
+        '404':
+          description: Template not found
+        '405':
+          description: Invalid input
+    delete:
+      summary: Delete a template
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: template_id
+          in: path
+          description: ID of template
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Template deleted
+        '404':
+          description: Template not found
+  /user/{user_id}/category:
+    post:
+      summary: Create a new category
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Category object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: Category created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWID'
+        '405':
+          description: Invalid input
+  /user/{user_id}/category/{category_id}:
+    get:
+      summary: Get a category
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: ID of category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Category found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWID'
+        '404':
+          description: Category not found
+    put:
+      summary: Update a category
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: ID of category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Category object that needs to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: Category updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryWID'
+        '404':
+          description: Category not found
+        '405':
+          description: Invalid input
+    delete:
+      summary: Delete a category
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: category_id
+          in: path
+          description: ID of category
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Category deleted
+        '404':
+          description: Category not found
+    
+components:
+  schemas:
+    User:
+      required: [Nom, PassWord]
+      type: object
+      properties:
+        Nom:
+          type: string
+          description: Nom de l'utilisateur
+          example: Michael Jackson
+        PassWord:
+          type: string
+          description: Mod de passe de l'utilisateur
+          example: 444719
+    UserWID:
+      required: [User_ID,Nom]
+      type: object
+      properties:
+        User_ID:
+          type: integer
+          description: the user ID.
+          example: 3
+        Nom:
+          type: string
+          description: Nom de l'utilisateur
+          example: Michael Jackson
+    Event:
+      required: [User_ID, Weight, Name, Date, Category_ID]
+      type: object
+      properties:
+        User_ID:
+          type: integer
+          description: the user ID.
+          example: 3
+        Name:
+          type: string
+          description: le nom de l'event
+          example: Rater le bus
+        Date:
+          type: string
+          description: date et heure de l'event
+          example: 2020-12-12 12:12:12
+        Category_id:
+          type: string
+          description: id de la Category
+          example: 2
+        Weight:
+          type: integer
+          description: poids de l'event
+          example: 2
+    EventWID:
+      required: [Event_ID, User_ID, Weight, Name, Date, Category_ID]
+      type: object
+      properties:
+        Event_ID:
+          type: integer
+          description: the event ID.
+          example: 3
+        User_ID:
+          type: integer
+          description: the user ID.
+          example: 3
+        Name:
+          type: string
+          description: le nom de l'event
+          example: Rater le bus
+        Date:
+          type: string
+          description: date et heure de l'event
+          example: 2020-12-12 12:12:12
+        Category_id:
+          type: string
+          description: id de la Category
+          example: 2
+        Weight:
+          type: integer
+          description: poids de l'event
+          example: 2
+    EventTemplate:
+      required: [User_ID, ProposedWeight, Name, Category_ID]
+      type: object
+      properties:
+        User_ID:
+          type: integer
+          description: the user ID.
+          example: 3
+        Name:
+          type: string
+          description: le nom de l'event
+          example: Rater le bus
+        Category_id:
+          type: integer
+          description: id de la Category
+          example: 2
+    EventTemplateWID:
+      required: [User_ID, ProposedWeight, Name, Category_ID, Template_ID]
+      type: object
+      properties:
+        User_ID:
+          type: integer
+          description: the user ID.
+          example: 3
+        Name:
+          type: string
+          description: le nom de l'event
+          example: Rater le bus
+        Category_id:
+          type: integer
+          description: id de la Category
+          example: 2
+        Template_ID:
+          type: integer
+          description: id du template
+          example: 2
+    Category:
+      required: [Name]
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Nom de la categorie
+          example: League of legends
+    CategoryWID:
+      required: [Category_ID, Name]
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Nom de la categorie
+          example: League of legends
+        Category_ID:
+          type: integer
+          description: id de la categorie
+          example: 2
