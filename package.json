@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/olingo99/umadWeb/issues"
   },
-  "homepage": "https://github.com/olingo99/umadWeb#readme"
+  "homepage": "https://github.com/olingo99/umadWeb#readme",
+  "dependencies": {
+    "mysql2": "^3.2.0",
+    "nodemon": "^2.0.22",
+    "sequelize": "^6.30.0"
+  }
 }

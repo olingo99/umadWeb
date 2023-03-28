@@ -11,6 +11,10 @@ app.use(express.static('public'));
 
 app.use('/', routes);
 
+let sequelize = require
+
+
+
 // Setup server port
 let port = 8000;
 // Launch app to listen to specified port
