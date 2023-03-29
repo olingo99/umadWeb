@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: EcamAir API
   description: Hello
-  version: '0.1'
+  version: 1.0.0
 paths:
   /user:
     post:
@@ -103,7 +103,7 @@ paths:
           description: User not found
         '405':
           description: Invalid input
-  /user/{user_id}/humeur:
+  /user/{user_id}/mood:
     get:
       summary: Get a user's mood
       parameters:
@@ -296,6 +296,27 @@ paths:
                 $ref: '#/components/schemas/EventTemplateWID'
         '405':
           description: Invalid input
+    get:
+      summary: Get a user's templates
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Templates found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventTemplateWID'
+        '404':
+          description: Templates not found
   /user/{user_id}/templates/{template_id}:
     get:
       summary: Get a template
@@ -407,6 +428,27 @@ paths:
                 $ref: '#/components/schemas/CategoryWID'
         '405':
           description: Invalid input
+    get:
+      summary: Get a user's categories
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Categories found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryWID'
+        '404':
+          description: Categories not found
   /user/{user_id}/category/{category_id}:
     get:
       summary: Get a category

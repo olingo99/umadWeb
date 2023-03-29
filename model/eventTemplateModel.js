@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../database.js');
 
-const Event = db.define('event', {
-    idevent: {
+const EventTemplate = db.define('eventtemplate', {
+    ideventTemplate: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
@@ -11,15 +11,14 @@ const Event = db.define('event', {
     Name: { type: Sequelize.STRING, allowNull: false },
     // iduser: { type: Sequelize.STRING, allowNull: false, references: { model: 'user', key: 'iduser' } },
     iduser: { type: Sequelize.INTEGER, allowNull: false },
-    Weight: { type: Sequelize.INTEGER, allowNull: false },
-    Date: { type: Sequelize.DATE, allowNull: false },
+    ProposedWeight: { type: Sequelize.INTEGER, allowNull: false },
     // idcategory: { type: Sequelize.INTEGER, allowNull: false, references: { model: 'category', key: 'idcategory' } },
     idcategory: { type: Sequelize.INTEGER, allowNull: false },
 }, {
     timestamps: false
 })
 
-// Event.hasOne(User);
-// Event.hasOne(Category)
+// EventTemplate.hasOne(User);
+// EventTemplate.hasOne(Category);
 
-module.exports = Event;
+module.exports = EventTemplate;

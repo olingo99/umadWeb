@@ -1,19 +1,18 @@
 const Sequelize = require('sequelize');
 const db = require('../database.js');
 
-const User = db.define('user', {
-    iduser: {
+const Category = db.define('category', {
+    idcategory: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
     Name: { type: Sequelize.STRING, allowNull: false },
-    passWord: { type: Sequelize.STRING, allowNull: false },
-    Mood: { type: Sequelize.INTEGER, allowNull: false }
 }, {
     timestamps: false
 })
 
 
-module.exports = User;
+
+module.exports = Category;
