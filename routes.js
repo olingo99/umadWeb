@@ -4,7 +4,7 @@ let router = express.Router();
 let userController = require('./controller/userController');
 let eventController = require('./controller/eventController');
 // let eventTemplateController = require('./controller/eventTemplateController');
-// let friendMapController = require('./controller/friendMapController');
+let friendMapController = require('./controller/friendsMapController');
 // let categoryController = require('./controller/categoryController');
 
 
@@ -28,7 +28,7 @@ router.get('/user/:userId/LastEvent', eventController.getLastEvent);
 
 router.get('/user/:userId/events/:date', eventController.getEventsByDate);
 
-// router.post('/user/:userId/add', friendMapController.addFriend);
+router.post('/user/:userId/add', friendMapController.addFriend);
 
 // router.get('/user/:userId/friends', friendMapController.getFriends);
 
