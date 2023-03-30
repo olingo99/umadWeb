@@ -8,16 +8,13 @@ const db = require('../model/index.js');
 // }
 
 exports.createUser = function (req, res) {
-    checkLogged(function () {
-        db.User.create({ Name: req.body.Name, passWord: req.body.passWord, Mood: 0 }).then(function (user) {
-            if (user.length != 0) {
-                res.json(user);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-    }, req, res)
-
+    db.User.create({ Name: req.body.Name, passWord: req.body.passWord, Mood: 0 }).then(function (user) {
+        if (user.length != 0) {
+            res.json(user);
+        } else {
+            res.sendStatus(404);
+        }
+    })
 }
 
 function getUser(req, res) {
@@ -29,7 +26,7 @@ function getUser(req, res) {
                 res.sendStatus(404);
             }
         })
-    },req,res)
+    }, req, res)
 }
 
 exports.getUser = getUser;
@@ -46,7 +43,7 @@ exports.updateUser = function (req, res) {
                 res.sendStatus(404);
             }
         })
-    },req,res)
+    }, req, res)
 }
 
 exports.deleteUser = function (req, res) {
@@ -58,7 +55,7 @@ exports.deleteUser = function (req, res) {
                 res.sendStatus(404);
             }
         })
-    },req,res)
+    }, req, res)
 }
 
 exports.login = function (req, res) {
@@ -82,7 +79,7 @@ exports.getMood = function (req, res) {
                 res.sendStatus(404);
             }
         })
-    },req,res)
+    }, req, res)
 }
 
 
