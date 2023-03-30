@@ -5,7 +5,7 @@ let userController = require('./controller/userController');
 let eventController = require('./controller/eventController');
 let eventTemplateController = require('./controller/eventTemplateController');
 let friendMapController = require('./controller/friendsMapController');
-// let categoryController = require('./controller/categoryController');
+let categoryController = require('./controller/categoryController');
 
 
 router.post('/user',userController.createUser);
@@ -44,12 +44,12 @@ router.delete('/user/:userId/templates/:templateId', eventTemplateController.del
 
 router.post('/user/:userId/category', categoryController.createCategory);
 
-// router.get('/user/:userId/category', categoryController.getCategories);
+router.get('/user/:userId/category', categoryController.getCategories);
 
-// router.get('/user/:userId/category/:categoryId', categoryController.getCategoryById);
+router.get('/user/:userId/category/:categoryId', categoryController.getCategoryById);
 
-// router.put('/user/:userId/category/:categoryId', categoryController.updateCategory);
+router.put('/user/:userId/category/:categoryId', categoryController.updateCategory);
 
-// router.delete('/user/:userId/category/:categoryId', categoryController.deleteCategory);
+router.delete('/user/:userId/category/:categoryId', categoryController.deleteCategory);
 
 module.exports = router;

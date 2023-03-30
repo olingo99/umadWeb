@@ -8,7 +8,9 @@ const Category = db.define('category', {
         allowNull: false,
         primaryKey: true
     },
+    iduser: { type: Sequelize.INTEGER, allowNull: false },
     Name: { type: Sequelize.STRING, allowNull: false },
+
 }, {
     timestamps: false
 })
