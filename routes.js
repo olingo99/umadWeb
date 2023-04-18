@@ -15,7 +15,7 @@ router.get('/user/:userId',userController.checkLogged, userController.getUser);
 
 router.put('/user/:userId',userController.checkLogged,userController.updateUser);
 
-router.delete('/user/:userId',userController.checkLogged,userController.deleteUser);
+router.delete('/user/:userId',userController.checkLogged,userController.checkAdmin,userController.deleteUser);
 
 router.post('/login',userController.login);
 

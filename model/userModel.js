@@ -10,7 +10,8 @@ const User = db.define('user', {
     },
     Name: { type: Sequelize.STRING, allowNull: false },
     passWord: { type: Sequelize.STRING, allowNull: false },
-    Mood: { type: Sequelize.INTEGER, allowNull: false }
+    Mood: { type: Sequelize.INTEGER, allowNull: false },
+    Admin:{type : Sequelize.BOOLEAN, allowNull: false, defaultValue: false}
 }, {
     timestamps: false
 })

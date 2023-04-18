@@ -71,8 +71,9 @@ exports.deleteUser = function (req, res) {
 
 
 exports.login = function (req, res) {
-    db.User.findAll({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
+    db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
         if (user.length != 0) {
+            console.log(user);
             let payload = { id: user.iduser };
             let token = jwt.sign(payload, jwtKey, {
                 algorithm: "HS256",
@@ -112,7 +113,6 @@ exports.getMood = function (req, res) {
 
 
 function checkLogged(req, res, next) {
-    console.log("if")
     if (typeof req.headers.authorization !== "undefined") {
 
         let token = req.headers.authorization.split(" ")[0];
@@ -131,5 +131,23 @@ function checkLogged(req, res, next) {
     }
 }
 
+function checkAdmin(req, res, next) {
+    console.log(req.user);
+    console.log(req.user.id);
+    db.User.findOne({ where: { iduser: req.user.id } }).then(function (user) {
+        if (user.length != 0) {
+            if (user.Admin) {
+                return next();
+            }
+            else {
+                res.status(403).json({ error: "Not admin" });
+            }
+        }
+        else {
+            res.status(404).json({ error: "User not found" });
+        }
+    });
+}
 
 exports.checkLogged = checkLogged;
+exports.checkAdmin = checkAdmin;
