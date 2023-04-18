@@ -1,10 +1,17 @@
 const { Sequelize } = require('sequelize');
 
 // Option 2: Passing parameters separately (sqlite)
-const sequelize = new Sequelize('umad', 'olingo', 'olingoolingo', {
+// const sequelize = new Sequelize('umad', 'olingo', 'olingoolingo', {
+//   dialect: 'mysql',
+//   dialectOptions: {
+//     host: 'pat.infolab.ecam.be', port:63340
+//   }
+// })
+
+const sequelize = new Sequelize('umad2', 'olingo', 'olingoolingo', {
   dialect: 'mysql',
   dialectOptions: {
-    host: 'localhost',
+    host: 'localhost'
   }
 })
 

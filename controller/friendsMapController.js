@@ -4,7 +4,7 @@ const db = require('../model/index.js');
 const checkLogged = require('./userController.js').checkLogged;
 
 exports.addFriend = function (req, res) {
-    checkLogged(function () {
+    // checkLogged(function () {
         date = new Date();
         date = date.getUTCFullYear() + '-' +
             ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
@@ -19,7 +19,7 @@ exports.addFriend = function (req, res) {
                 res.sendStatus(404);
             }
         })
-    }, req, res)
+    // }, req, res)
 }
 
 // exports.getFriends = function (req, res) {
@@ -42,7 +42,7 @@ exports.addFriend = function (req, res) {
 //try to change this to sequelize query
 
 exports.getFriends = function (req, res) {
-    checkLogged(function () {
+    // checkLogged(function () {
         db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT idfriend FROM umad.friendsmaps WHERE iduser = ${req.params.userId})`, {
             model: db.User,
             mapToModel: true // pass true here if you have any mapped fields
@@ -53,7 +53,7 @@ exports.getFriends = function (req, res) {
                 res.sendStatus(404);
             }
         })
-    }, req, res)
+    // }, req, res)
 }
 
 
