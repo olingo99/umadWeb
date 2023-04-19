@@ -8,7 +8,7 @@ const { Sequelize } = require('sequelize');
 //   }
 // })
 
-const sequelize = new Sequelize('umad2', 'olingo', 'olingoolingo', {
+const sequelize = new Sequelize('umad', 'olingo', 'olingoolingo', {
   dialect: 'mysql',
   dialectOptions: {
     host: 'localhost'
