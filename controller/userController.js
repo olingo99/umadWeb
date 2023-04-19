@@ -30,6 +30,21 @@ function getUser(req, res) {
 
 exports.getUser = getUser;
 
+exports.getUserByName = function (req,res){
+    console.log("feeeeeeeur------------------------------------");
+    console.log(req);
+    console.log(req.params);
+
+    db.User.findOne({ where:{Name:req.params.Name}}).then(function (user){
+        if (user !== null){
+            res.json(user.dataValues);
+        }
+        else{
+            res.sendStatus(404);
+        }
+    })
+}
+
 
 //a changer, si on change rien ca return not found
 exports.updateUser = function (req, res) {
@@ -71,17 +86,20 @@ exports.deleteUser = function (req, res) {
 
 
 exports.login = function (req, res) {
+    console.log(req.body);
     db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
-        if (user.length != 0) {
-            console.log(user);
+        console.log(user);
+        if (user !== null) {
             let payload = { id: user.iduser };
             let token = jwt.sign(payload, jwtKey, {
                 algorithm: "HS256",
                 expiresIn: jwtExpirySeconds,
             })
-            res.json({ "token": token, "maxAge": jwtExpirySeconds * 1000 });
+            token = {"token": token, "maxAge": jwtExpirySeconds * 1000 };
+            res.json(Object.assign({},user.dataValues, token));
+            // res.json({"token": token, "maxAge": jwtExpirySeconds * 1000 });
         } else {
-            res.sendStatus(401);
+            res.sendStatus(404);
         }
     })
 }

@@ -1,10 +1,12 @@
 // Import express
 let express = require('express');
+const cors = require('cors');
 
 // Initialize the app
 let app = express();
 
 app.use(express.json());
+app.use(cors());
 
 let session = require('express-session');
 
@@ -37,7 +39,7 @@ app.use('/', routes);
 ;
 
 // Setup server port
-let port = 8000;
+let port = process.env.NODE_PORT | 3000;
 // Launch app to listen to specified port
 app.listen(port, function () {
     console.log('Server running on port ' + port);

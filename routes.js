@@ -13,6 +13,8 @@ router.post('/user',userController.createUser);
 
 router.get('/user/:userId',userController.checkLogged, userController.getUser);
 
+router.get('/user/name/:Name',userController.getUserByName);
+
 router.put('/user/:userId',userController.checkLogged,userController.updateUser);
 
 router.delete('/user/:userId',userController.checkLogged,userController.checkAdmin,userController.deleteUser);
