@@ -9,6 +9,8 @@ let categoryController = require('./controller/categoryController');
 
 
 
+router.get('/', function (req, res) {res.status(200).json({ message: "Welcome to the Umad API" })});
+
 router.post('/user',userController.createUser);
 
 router.get('/user/:userId',userController.checkLogged, userController.getUser);
