@@ -147,6 +147,9 @@ function checkLogged(req, res, next) {
 
         });
     }
+    else{
+        res.status(401).json({error:"Not Authorized, missing token"});
+    }
 }
 
 function checkAdmin(req, res, next) {
