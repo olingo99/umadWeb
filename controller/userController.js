@@ -95,6 +95,7 @@ exports.login = function (req, res) {
                 algorithm: "HS256",
                 expiresIn: jwtExpirySeconds,
             })
+            console.log("token:", token);
             token = {"token": token, "maxAge": jwtExpirySeconds * 1000 };
             res.json(Object.assign({},user.dataValues, token));
             // res.json({"token": token, "maxAge": jwtExpirySeconds * 1000 });

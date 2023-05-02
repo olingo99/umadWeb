@@ -7,7 +7,7 @@ exports.getEvents = function (req, res) {
     // checkLogged(function () {
         date = new Date();
         today = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
-        getByDate(today).then(function (event) {
+        getByDate(today, req.params.userId).then(function (event) {
             if (event.length != 0) {
                 res.json(event);
             } else {
@@ -19,7 +19,16 @@ exports.getEvents = function (req, res) {
 
 exports.createEvent = function (req, res) {
     // checkLogged(function () {
+        if (req.body.Date == undefined) {
+            date = new Date();
+            date.setHours(date.getHours() + 2); //cache misere faut changer plus tard demander au prof
+            console.log(date.getDate());
+            // req.body.Date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+            req.body.Date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()+':'+date.getSeconds()+'.000';
+
+        }
         db.Event.create({ Name: req.body.Name, iduser: req.params.userId, idcategory: req.body.idcategory, Date: req.body.Date, Weight: req.body.Weight }).then(function (event) {
+            console.log(req.body.Date);
             if (event.length != 0) {
                 res.json(event);
             } else {
@@ -31,7 +40,7 @@ exports.createEvent = function (req, res) {
 
 exports.getLastEvent = function (req, res) {
     // checkLogged(function () {
-        db.Event.findAll({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1 }).then(function (event) {
+        db.Event.findOne({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1 }).then(function (event) {
             if (event.length != 0) {
                 res.json(event);
             } else {
@@ -44,7 +53,7 @@ exports.getLastEvent = function (req, res) {
 exports.getEventsByDate = function (req, res) {
     // checkLogged(function () {
 
-        getByDate(req.params.date).then(function (event) {
+        getByDate(req.params.date, req.params.userId).then(function (event) {
             if (event.length != 0) {
                 res.json(event);
             } else {
@@ -54,8 +63,8 @@ exports.getEventsByDate = function (req, res) {
     // }, req, res)
 }
 
-async function getByDate(date) {
-    return await db.sequelize.query(`SELECT * FROM umad.events WHERE DATE(Date)='${date}'`, {
+async function getByDate(date, userId) {
+    return await db.sequelize.query(`SELECT * FROM umad.events WHERE DATE(Date)='${date}' and iduser='${userId}'`, {
         model: db.Event,
         mapToModel: true // pass true here if you have any mapped fields
     });
