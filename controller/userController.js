@@ -18,7 +18,7 @@ exports.createUser = function (req, res) {
 
 function getUser(req, res) {
     // checkLogged(function () {
-    db.User.findAll({ where: { iduser: req.params.userId } }).then(function (user) {
+    db.User.findOne({ where: { iduser: req.params.userId } }).then(function (user) {
         if (user.length != 0) {
             res.json(user);
         } else {
