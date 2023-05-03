@@ -29,7 +29,7 @@ router.get('/user/:userId/events',userController.checkLogged,eventController.get
 
 router.post('/user/:userId/events',userController.checkLogged,eventController.createEvent);
 
-router.get('/user/:userId/LastEvent',userController.checkLogged, eventController.getLastEvent);
+router.get('/user/:userId/lastevent',userController.checkLogged, eventController.getLastEvent);
 
 router.get('/user/:userId/events/:date',userController.checkLogged, eventController.getEventsByDate);
 
