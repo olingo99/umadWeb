@@ -38,15 +38,21 @@ exports.createEvent = function (req, res) {
     // }, req, res)
 }
 
+// exports.getLastEvent = function (req, res) {
+//     // checkLogged(function () {
+//         db.Event.findOne({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1 }).then(function (event) {
+//             if (event.length != 0) {
+//                 res.json(event);
+//             } else {
+//                 res.sendStatus(404);
+//             }
+//         })
+//     // }, req, res)
+// }
+
 exports.getLastEvent = function (req, res) {
     // checkLogged(function () {
-        db.Event.findOne({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1 }).then(function (event) {
-            if (event.length != 0) {
-                res.json(event);
-            } else {
-                res.sendStatus(404);
-            }
-        })
+        res.json("{'feur':'aled}");
     // }, req, res)
 }
 
