@@ -41,7 +41,7 @@ exports.createEvent = function (req, res) {
 exports.getLastEvent = function (req, res) {
     // checkLogged(function () {
         // db.Event.findOne({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1 }).then(function (event) {
-        db.Event.findOne({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']]}).then(function (event) {
+        db.Event.findAll({ where: { iduser: req.params.userId }, order: [['Date', 'DESC']], limit: 1}).then(function (event) {
         
             if (event.length != 0) {
                 res.json(event);
