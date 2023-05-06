@@ -73,7 +73,7 @@ exports.getFriends = function (req, res) {
 //   };
 
 
-exports.AcceptFriend = function (req, res) {
+exports.acceptFriend = function (req, res) {
     db.FriendsMap.update({ status: "accepted" }, { where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (result) {
         if (result == 1) {
             db.FriendsMap.findOne({ where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (friend) {
