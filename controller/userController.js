@@ -132,8 +132,9 @@ exports.getMood = function (req, res) {
 
 
 function checkLogged(req, res, next) {
+    console.log("checkLogged");
     if (typeof req.headers.authorization !== "undefined") {
-
+        console.log("checkLogged2");
         let token = req.headers.authorization.split(" ")[0];
 
         jwt.verify(token, jwtKey, (err, payload) => {
