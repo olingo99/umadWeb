@@ -90,3 +90,22 @@ exports.acceptFriend = function (req, res) {
         }
     })
 }
+
+
+exports.addFriendsByName = function (req, res) {
+    db.sequelize.findOne({ where: { username: req.body.username } }).then(function (user) {
+        if (user != null) {
+            db.FriendsMap.create({ iduser: req.params.userId, idfriend: user.iduser, date: req.body.date, status: "pending" }).then(function (friend) {
+                if (friend != null) {
+                    res.json(friend);
+                }
+                else {
+                    res.sendStatus(404);
+                }
+            })
+        } else {
+            res.sendStatus(404);
+        }
+    }
+    )
+}
