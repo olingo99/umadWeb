@@ -56,6 +56,18 @@ exports.getFriends = function (req, res) {
     // }, req, res)
 }
 
+exports.getFriendRequests = function (req, res) {
+db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT idfriend FROM umad.friendsmaps WHERE status='pending' AND  iduser = ${req.params.userId})`, {
+    model: db.User,
+    mapToModel: true // pass true here if you have any mapped fields
+}).then(function (friends) {
+    if (friends.length != 0) {
+        res.json(friends);
+    } else {
+        res.sendStatus(404);
+    }
+})
+}
 
 // exports.getFriends = function (req, res) {
 //     try {
