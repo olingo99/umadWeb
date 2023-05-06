@@ -12,7 +12,7 @@ exports.addFriend = function (req, res) {
             ('00' + date.getUTCHours()).slice(-2) + ':' +
             ('00' + date.getUTCMinutes()).slice(-2) + ':' +
             ('00' + date.getUTCSeconds()).slice(-2);
-        db.FriendsMap.create({ iduser: req.params.userId, idfriend: req.body.idfriend, date: date }).then(function (friend) {
+        db.FriendsMap.create({ iduser: req.params.userId, idfriend: req.body.idfriend, date: date, status:"pending" }).then(function (friend) {
             if (friend.length != 0) {
                 res.json(friend);
             } else {
@@ -71,3 +71,22 @@ exports.getFriends = function (req, res) {
 //       res.sendStatus(500);
 //     }
 //   };
+
+
+exports.AcceptFriend = function (req, res) {
+    db.FriendsMap.update({ status: "accepted" }, { where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (result) {
+        if (result == 1) {
+            db.FriendsMap.findOne({ where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (friend) {
+                if (friend != null) {
+                    res.json(friend);
+                }
+                else {
+                    res.sendStatus(404);
+                }
+            })
+        } else {
+            // res.json(result)
+            res.sendStatus(404);
+        }
+    })
+}

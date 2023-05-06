@@ -57,4 +57,6 @@ router.put('/user/:userId/category/:categoryId',userController.checkLogged, cate
 
 router.delete('/user/:userId/category/:categoryId',userController.checkLogged, categoryController.deleteCategory);
 
+router.post('/user/:userId/acceptFriend',userController.checkLogged, friendMapController.acceptFriend);
+
 module.exports = router;
