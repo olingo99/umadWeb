@@ -13,6 +13,7 @@ const FriendsMap = db.define('friendsmap', {
     date: { type: Sequelize.DATE, allowNull: false },
     // idfriend: { type: Sequelize.INTEGER, allowNull: false, references: { model: 'user', key: 'iduser' } },
     idfriend: { type: Sequelize.INTEGER, allowNull: false },
+    status: { type: Sequelize.STRING, allowNull: false }
 }, {
     timestamps: false
 })
