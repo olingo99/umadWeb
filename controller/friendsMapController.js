@@ -43,7 +43,7 @@ const checkLogged = require('./userController.js').checkLogged;
 
 exports.getFriends = function (req, res) {
     // checkLogged(function () {
-        db.sequelize.query(`SELECT * FROM umad.users WHERE status='accepted' AND iduser IN (SELECT idfriend FROM umad.friendsmaps WHERE iduser = ${req.params.userId})`, {
+        db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT idfriend FROM umad.friendsmaps WHERE status='accepted' AND  iduser = ${req.params.userId})`, {
             model: db.User,
             mapToModel: true // pass true here if you have any mapped fields
         }).then(function (friends) {
