@@ -33,7 +33,7 @@ router.get('/user/:userId/lastevent',userController.checkLogged, eventController
 
 router.get('/user/:userId/events/:date',userController.checkLogged, eventController.getEventsByDate);
 
-router.post('/user/:userId/add',userController.checkLogged, friendMapController.addFriend);
+router.post('/user/:userId/friends',userController.checkLogged, friendMapController.addFriend);
 
 router.get('/user/:userId/friends',userController.checkLogged, friendMapController.getFriends);
 
