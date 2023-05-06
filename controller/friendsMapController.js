@@ -57,7 +57,7 @@ exports.getFriends = function (req, res) {
 }
 
 exports.getFriendRequests = function (req, res) {
-db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT idfriend FROM umad.friendsmaps WHERE status='pending' AND  iduser = ${req.params.userId})`, {
+db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT iduser FROM umad.friendsmaps WHERE status='pending' AND  idfriend = ${req.params.userId})`, {
     model: db.User,
     mapToModel: true // pass true here if you have any mapped fields
 }).then(function (friends) {
