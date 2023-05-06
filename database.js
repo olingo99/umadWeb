@@ -15,6 +15,13 @@ const sequelize = new Sequelize('umad', 'olingo', 'olingoolingo', {
   }
 })
 
+// const sequelize = new Sequelize('umad', 'root', 'root', {
+//   dialect: 'mysql',
+//   dialectOptions: {
+//     host: 'localhost'
+//   }
+// })
+
 module.exports = sequelize;
 
 // async function test(){

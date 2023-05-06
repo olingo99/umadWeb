@@ -3,24 +3,24 @@ const db = require('../model/index.js');
 
 const checkLogged = require('./userController.js').checkLogged;
 
-exports.addFriend = function (req, res) {
-    // checkLogged(function () {
-        date = new Date();
-        date = date.getUTCFullYear() + '-' +
-            ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
-            ('00' + date.getUTCDate()).slice(-2) + ' ' +
-            ('00' + date.getUTCHours()).slice(-2) + ':' +
-            ('00' + date.getUTCMinutes()).slice(-2) + ':' +
-            ('00' + date.getUTCSeconds()).slice(-2);
-        db.FriendsMap.create({ iduser: req.params.userId, idfriend: req.body.idfriend, date: date, status:"pending" }).then(function (friend) {
-            if (friend.length != 0) {
-                res.json(friend);
-            } else {
-                res.sendStatus(404);
-            }
-        })
-    // }, req, res)
-}
+// exports.addFriend = function (req, res) {
+//     // checkLogged(function () {
+//         date = new Date();
+//         date = date.getUTCFullYear() + '-' +
+//             ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+//             ('00' + date.getUTCDate()).slice(-2) + ' ' +
+//             ('00' + date.getUTCHours()).slice(-2) + ':' +
+//             ('00' + date.getUTCMinutes()).slice(-2) + ':' +
+//             ('00' + date.getUTCSeconds()).slice(-2);
+//         db.FriendsMap.create({ iduser: req.params.userId, idfriend: req.body.idfriend, date: date, status:"pending" }).then(function (friend) {
+//             if (friend.length != 0) {
+//                 res.json(friend);
+//             } else {
+//                 res.sendStatus(404);
+//             }
+//         })
+//     // }, req, res)
+// }
 
 // exports.getFriends = function (req, res) {
 //     checkLogged(function () {
@@ -93,17 +93,22 @@ exports.acceptFriend = function (req, res) {
 
 
 exports.addFriendsByName = function (req, res) {
-    db.sequelize.findOne({ where: { username: req.body.username } }).then(function (user) {
+    console.log("feur")
+    db.User.findOne({ where: { Name: req.body.username } }).then(function (user) {
         if (user != null) {
-            db.FriendsMap.create({ iduser: req.params.userId, idfriend: user.iduser, date: req.body.date, status: "pending" }).then(function (friend) {
+            console.log("feur2")
+            db.FriendsMap.create({ iduser: req.params.userId, idfriend: user.iduser, date: new Date(), status: "pending" }).then(function (friend) {
                 if (friend != null) {
+                    console.log("feur3")
                     res.json(friend);
                 }
                 else {
+                    console.log("error in create");
                     res.sendStatus(404);
                 }
             })
         } else {
+            console.log("error in find");
             res.sendStatus(404);
         }
     }
