@@ -98,7 +98,7 @@ exports.acceptFriend = function (req, res) {
             })
         } else {
             // res.json(result)
-            res.sendStatus(404);
+            res.sendStatus(400);
         }
     })
 }
