@@ -86,7 +86,7 @@ db.sequelize.query(`SELECT * FROM umad.users WHERE iduser IN (SELECT iduser FROM
 
 
 exports.acceptFriend = function (req, res) {
-    db.FriendsMap.update({ status: "accepted" }, { where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (result) {
+    db.FriendsMap.update({ status: "accepted" }, { where: { iduser: req.body.idfriend , idfriend:req.params.userId } }).then(function (result) {
         if (result == 1) {
             db.FriendsMap.findOne({ where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (friend) {
                 if (friend != null) {
@@ -104,7 +104,7 @@ exports.acceptFriend = function (req, res) {
 }
 
 exports.declineFriend = function (req, res) {
-    db.FriendsMap.update({ status: "declined" }, { where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (result) {
+    db.FriendsMap.update({ status: "declined" }, { where: { iduser:req.body.idfriend , idfriend: req.params.userId } }).then(function (result) {
         if (result == 1) {
             db.FriendsMap.findOne({ where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (friend) {
                 if (friend != null) {
