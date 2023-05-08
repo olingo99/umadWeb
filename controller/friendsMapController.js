@@ -103,6 +103,25 @@ exports.acceptFriend = function (req, res) {
     })
 }
 
+exports.declineFriend = function (req, res) {
+    db.FriendsMap.update({ status: "declined" }, { where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (result) {
+        if (result == 1) {
+            db.FriendsMap.findOne({ where: { iduser: req.params.userId, idfriend: req.body.idfriend } }).then(function (friend) {
+                if (friend != null) {
+                    res.json(friend);
+                }
+                else {
+                    res.sendStatus(404);
+                }
+            })
+        } else {
+            // res.json(result)
+            res.sendStatus(404);
+        }
+    })
+}
+
+
 
 exports.addFriendsByName = function (req, res) {
     console.log("feur")
