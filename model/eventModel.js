@@ -19,6 +19,20 @@ const Event = db.define('event', {
     timestamps: false
 })
 
+
+Event.addHook('afterCreate', async (event, options) => {
+    try {
+
+      const user = await event.getUser();
+      const newMood = user.dataValues.Mood + event.Weight;
+
+      await user.update({ Mood: newMood });
+
+    } catch (error) {
+      console.error('Failed to update user\'s mood:', error);
+    }
+  });
+
 // Event.hasOne(User);
 // Event.hasOne(Category)
 
