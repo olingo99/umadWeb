@@ -60,8 +60,12 @@ exports.getLastEvent = function (req, res) {
 
 exports.getEventsByDate = function (req, res) {
     // checkLogged(function () {
-
-        getByDate(req.params.date, req.params.userId).then(function (event) {
+        let date = req.params.date;
+        let year = date.substring(0, 4);
+        let month = date.substring(4, 6);
+        let day = date.substring(6, 8);
+        date = year + '-' + month + '-' + day;
+        getByDate(date, req.params.userId).then(function (event) {
             if (event.length != 0) {
                 res.json(event);
             } else {
