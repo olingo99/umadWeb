@@ -26,6 +26,12 @@ Event.addHook('afterCreate', async (event, options) => {
       const user = await event.getUser();
       const newMood = user.dataValues.Mood + event.Weight;
 
+      if (newMood > 100) {
+        newMood = 100;
+      } else if (newMood < -100) {
+        newMood = -100;
+      }
+
       await user.update({ Mood: newMood });
 
     } catch (error) {
