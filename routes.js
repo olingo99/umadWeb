@@ -63,4 +63,6 @@ router.post('/user/:userId/declineFriend',userController.checkLogged, friendMapC
 
 router.get('/user/:userId/friendRequests',userController.checkLogged, friendMapController.getFriendRequests);
 
+// router.get('/login',function (req, res) {res.status(200).json({ message: "get login" })});
+
 module.exports = router;

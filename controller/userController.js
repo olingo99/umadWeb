@@ -32,8 +32,9 @@ exports.getUser = getUser;
 
 exports.getUserByName = function (req,res){
     console.log("feeeeeeeur------------------------------------");
-    console.log(req);
-    console.log(req.params);
+    // console.log(req);
+    // console.log(req.params);
+    console.log(req.headers);
 
     db.User.findOne({ where:{Name:req.params.Name}}).then(function (user){
         if (user !== null){
@@ -86,6 +87,8 @@ exports.deleteUser = function (req, res) {
 
 
 exports.login = function (req, res) {
+    console.log("login");
+    // console.log(req);
     console.log(req.body);
     db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
         console.log(user);

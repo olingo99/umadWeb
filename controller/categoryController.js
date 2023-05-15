@@ -5,8 +5,10 @@ const checkLogged = require('./userController.js').checkLogged;
 
 exports.createCategory = function (req, res) {
     // checkLogged(function () {
-        db.Category.create({ Name: req.body.Name, iduser: req.params.userId }).then(function (category) {
+        db.Category.create({ Name: req.body.Name, iduser: +req.params.userId }).then(function (category) {
             if (category.length != 0) {
+                console.log("category created");
+                console.log(category);
                 res.json(category);
             } else {
                 res.sendStatus(404);
