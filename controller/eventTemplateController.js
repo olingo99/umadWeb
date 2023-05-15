@@ -6,7 +6,7 @@ const checkLogged = require('./userController.js').checkLogged;
 exports.createEventTemplate = function (req, res) {
     // checkLogged(function () {
         
-        db.EventTemplate.create({ Name: req.body.Name, iduser: req.params.userId, idcategory: req.body.idcategory, ProposedWeight: req.body.ProposedWeight }).then(function (event) {
+        db.EventTemplate.create({ Name: req.body.Name, iduser: +req.params.userId, idcategory: req.body.idcategory, ProposedWeight: req.body.ProposedWeight }).then(function (event) {
             if (event.length != 0) {
                 res.json(event);
             } else {
