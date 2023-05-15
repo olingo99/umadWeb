@@ -44,8 +44,12 @@ exports.getEventTemplateById = function (req, res) {
 
 exports.getEventTemplateByCategory = function (req, res) {
     // checkLogged(function () {
+        console.log("getEventTemplateByCategory");
+        console.log(req.params.categoryId);
+        console.log(req.params.userId);
         db.EventTemplate.findAll({ where: { idcategory: req.params.categoryId, iduser:req.params.userId } }).then(function (event) {
             if (event.length != 0) {
+                console.log(event);
                 res.json(event);
             } else {
                 res.sendStatus(404);
