@@ -42,6 +42,19 @@ exports.getEventTemplateById = function (req, res) {
     // }, req, res)
 }
 
+exports.getEventTemplateByCategory = function (req, res) {
+    // checkLogged(function () {
+        db.EventTemplate.findAll({ where: { idcategory: req.params.categoryId, iduser:req.params.userId } }).then(function (event) {
+            if (event.length != 0) {
+                res.json(event);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+    // }, req, res)
+}
+
+
 exports.updateEventTemplate = function (req, res) {
     // checkLogged(function () {
         db.EventTemplate.update({ Name: req.body.Name, iduser: req.params.userId, idcategory: req.body.idcategory, ProposedWeight: req.body.ProposedWeight }, { where: { ideventTemplate: req.params.templateId} }).then(function (result) {

@@ -43,6 +43,8 @@ router.get('/user/:userId/templates',userController.checkLogged, eventTemplateCo
 
 router.get('/user/:userId/templates/:templateId',userController.checkLogged, eventTemplateController.getEventTemplateById);
 
+router.get('/user/:userId/templates/category/:categoryId',userController.checkLogged, eventTemplateController.getEventTemplateByCategory);
+
 router.put('/user/:userId/templates/:templateId',userController.checkLogged, eventTemplateController.updateEventTemplate);
 
 router.delete('/user/:userId/templates/:templateId',userController.checkLogged, eventTemplateController.deleteEventTemplate);
