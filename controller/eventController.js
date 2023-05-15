@@ -27,7 +27,7 @@ exports.createEvent = function (req, res) {
             req.body.Date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes()+':'+date.getSeconds()+'.000';
 
         }
-        db.Event.create({ Name: req.body.Name, iduser: req.params.userId, idcategory: req.body.idcategory, Date: req.body.Date, Weight: req.body.Weight }).then(function (event) {
+        db.Event.create({ Name: req.body.Name, iduser: +req.params.userId, idcategory: req.body.idcategory, Date: req.body.Date, Weight: req.body.Weight }).then(function (event) {
             console.log(req.body.Date);
             if (event.length != 0) {
                 res.json(event);
