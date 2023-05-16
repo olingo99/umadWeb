@@ -60,9 +60,18 @@ exports.getLastEvent = function (req, res) {
 
 exports.deleteEvent = function (req, res) {
     // checkLogged(function () {
-        db.Event.destroy({ where: { iduser: +req.params.userId,idevent: +req.params.eventId } }).then(function (event) {
-            if (event.length != 0) {
-                res.json(event);
+        // db.Event.destroy({ where: { iduser: +req.params.userId,idevent: +req.params.eventId } }).then(function (event) {
+        //     if (event.length != 0) {
+        //         res.json(event);
+        //     } else {
+        //         res.sendStatus(404);
+        //     }
+        // })
+
+        db.Event.findOne({ where: { iduser: +req.params.userId, idevent: +req.params.eventId } }).then(function (event) {
+            if (event != null) {
+                event.destroy();
+                res.sendStatus(200);
             } else {
                 res.sendStatus(404);
             }
