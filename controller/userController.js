@@ -121,6 +121,19 @@ exports.getMood = function (req, res) {
     // }, req, res)
 }
 
+exports.getUserNames = function (req, res) {
+    // checkLogged(function () {
+    db.User.findAll({ attributes: ['Name'] }).then(function (user) {
+        if (user.length != 0) {
+            res.json(user);
+        } else {
+            res.sendStatus(404);
+        }
+    })
+    // }, req, res)
+}
+
+
 
 
 // function checkLogged(wrapped, req, res) {
