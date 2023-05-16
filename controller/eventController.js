@@ -58,6 +58,18 @@ exports.getLastEvent = function (req, res) {
 //     // }, req, res)
 // }
 
+exports.deleteEvent = function (req, res) {
+    // checkLogged(function () {
+        db.Event.destroy({ where: { iduser: +req.params.userId,idevent: +req.params.eventId } }).then(function (event) {
+            if (event.length != 0) {
+                res.json(event);
+            } else {
+                res.sendStatus(404);
+            }
+        })
+    // }, req, res)
+}
+
 exports.getEventsByDate = function (req, res) {
     // checkLogged(function () {
         let date = req.params.date;

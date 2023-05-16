@@ -27,6 +27,8 @@ router.get('/user/:userId/mood',userController.checkLogged,userController.getMoo
 
 router.get('/user/:userId/events',userController.checkLogged,eventController.getEvents);
 
+router.delete('/user/:userId/event/:eventId',userController.checkLogged, eventController.deleteEvent);
+
 router.post('/user/:userId/events',userController.checkLogged,eventController.createEvent);
 
 router.get('/user/:userId/lastevent',userController.checkLogged, eventController.getLastEvent);
@@ -64,6 +66,9 @@ router.post('/user/:userId/acceptFriend',userController.checkLogged, friendMapCo
 router.post('/user/:userId/declineFriend',userController.checkLogged, friendMapController.declineFriend);
 
 router.get('/user/:userId/friendRequests',userController.checkLogged, friendMapController.getFriendRequests);
+
+
+
 
 // router.get('/login',function (req, res) {res.status(200).json({ message: "get login" })});
 
