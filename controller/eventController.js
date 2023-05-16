@@ -70,8 +70,10 @@ exports.deleteEvent = function (req, res) {
 
         db.Event.findOne({ where: { iduser: +req.params.userId, idevent: +req.params.eventId } }).then(function (event) {
             if (event != null) {
-                event.destroy();
-                res.sendStatus(200);
+                event.destroy().then(function () {
+
+                    res.sendStatus(200);
+                })
             } else {
                 res.sendStatus(404);
             }
