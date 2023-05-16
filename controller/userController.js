@@ -120,10 +120,17 @@ exports.getMood = function (req, res) {
     })
     // }, req, res)
 }
-
+// Op = require('sequelize');
 exports.getUserNames = function (req, res) {
     // checkLogged(function () {
-    db.User.findAll({ attributes: ['Name'] }).then(function (user) {
+
+    db.User.findAll({ attributes: ['Name'], where:{
+        Name: {
+            [db.Sequelize.Op.like]: `%${req.body.search}%`,
+        }
+    }}).then(function (user) {
+        console.log(user.length);
+        console.log(user[0]);
         if (user.length != 0) {
             res.json(user);
         } else {

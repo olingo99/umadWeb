@@ -67,7 +67,7 @@ router.post('/user/:userId/declineFriend',userController.checkLogged, friendMapC
 
 router.get('/user/:userId/friendRequests',userController.checkLogged, friendMapController.getFriendRequests);
 
-router.get('/userNames',userController.checkLogged, userController.getUserNames);
+router.post('/userNames',userController.checkLogged, userController.getUserNames);
 
 
 
