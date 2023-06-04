@@ -10,10 +10,10 @@ exports.createEventTemplate = function (req, res) {
             if (event.length != 0) {
                 res.json(event);
             } else {
-                res.sendStatus(404);
+                res.sendStatus(500);
             }
         }).catch(function (err) {
-            res.sendStatus(404);
+            res.sendStatus(500);
         })
     // }, req, res)
 }

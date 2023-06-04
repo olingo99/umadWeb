@@ -99,7 +99,7 @@ exports.acceptFriend = function (req, res) {
             })
         } else {
             // res.json(result)
-            res.sendStatus(400);
+            res.sendStatus(404);
         }
     })
 }
@@ -136,7 +136,7 @@ exports.addFriendsByName = function (req, res) {
                 }
                 else {
                     console.log("error in create");
-                    res.sendStatus(404);
+                    res.sendStatus(500);
                 }
             })
         } else {

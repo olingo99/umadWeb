@@ -32,7 +32,7 @@ exports.createEvent = function (req, res) {
             if (event.length != 0) {
                 res.json(event);
             } else {
-                res.sendStatus(404);
+                res.sendStatus(400);
             }
         })
     // }, req, res)

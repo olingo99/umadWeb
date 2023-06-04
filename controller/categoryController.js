@@ -11,7 +11,7 @@ exports.createCategory = function (req, res) {
                 console.log(category);
                 res.json(category);
             } else {
-                res.sendStatus(404);
+                res.sendStatus(400);
             }
         })
     // }, req, res)
@@ -56,7 +56,7 @@ exports.updateCategory = function (req, res) {
                 })
             } else {
                 // res.json(result)
-                res.sendStatus(404);
+                res.sendStatus(400);
             }
         })
     // }, req, res)

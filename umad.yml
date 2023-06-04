@@ -4,6 +4,16 @@ info:
   description: Hello
   version: 1.0.0
 paths:
+  /:
+    get:
+      summary: Welcome message
+      responses:
+        '200':
+          description: Welcome message
+          content:
+            application/json:
+              schema:
+                type: string
   /user:
     post:
       summary: Create a new user
@@ -21,13 +31,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserWID'
-        '405':
+        '400':
           description: Invalid input
-  /user/{user_id}:
+  /user/{userId}:
     get:
       summary: Get a user by ID
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -46,7 +56,7 @@ paths:
     put:
       summary: Update an existing user
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -69,12 +79,10 @@ paths:
                 $ref: '#/components/schemas/UserWID'
         '404':
           description: User not found
-        '405':
-          description: Invalid input
     delete:
       summary: Delete a user
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -84,6 +92,25 @@ paths:
       responses:
         '200':
           description: User deleted
+        '404':
+          description: User not found
+  /user/name/{name}:
+    get:
+      summary: Get a user by name
+      parameters:
+        - name: name
+          in: path
+          description: Name of user to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
         '404':
           description: User not found
   /login:
@@ -101,13 +128,11 @@ paths:
           description: User logged in
         '404':
           description: User not found
-        '405':
-          description: Invalid input
-  /user/{user_id}/mood:
+  /user/{userId}/mood:
     get:
       summary: Get a user's mood
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -124,11 +149,11 @@ paths:
                 format: int64
         '404':
           description: Mood not found
-  /user/{user_id}/events:
+  /user/{userId}/events:
     get:
       summary: Get a user's today's events
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -149,7 +174,7 @@ paths:
     post:
       summary: Create a new event
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -170,39 +195,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventWID'
-        '405':
+        '400':
           description: Invalid input
-  /user/{user_id}/add:
-    post:
-      summary: Add a friend identified by his ID in requestBody
+  /user/{userId}/events/{eventId}:
+    delete:
+      summary: Delete an event
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
           schema:
             type: integer
             format: int64
-      requestBody:
-        description: ID of friend to add
-        required: true
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
+        - name: eventId
+          in: path
+          description: ID of event
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
-          description: Friend added
+          description: Event deleted
         '404':
-          description: Friend not found
-        '405':
-          description: Invalid input
-  /user/{user_id}/friends:
+          description: Event not found
+  /user/{userId}/friends:
     get:
       summary: Get a user's friends
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -220,11 +242,40 @@ paths:
                   $ref: '#/components/schemas/UserWID'
         '404':
           description: user not found
-  /user/{user_id}/LastEvent:
+    post:
+      summary: Add a friend
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: User object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              description: Name of friend
+      responses:
+        '200':
+          description: Friend added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '500':
+          description: Invalid input
+        '404':
+          description: User not found
+  /user/{userId}/LastEvent:
     get:
       summary: Get a user's last event
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -240,11 +291,11 @@ paths:
                 $ref: '#/components/schemas/EventWID'
         '404':
           description: Event not found
-  /user/{user_id}/events/{date}:
+  /user/{userId}/events/{date}:
     get:
-      summary: Get a user's events of a specific date
+      summary: Get a user's events for a specific date
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -253,7 +304,7 @@ paths:
             format: int64
         - name: date
           in: path
-          description: Date of events to return
+          description: Date of events to return (YYYYMMDD)
           required: true
           schema:
             type: string
@@ -269,11 +320,11 @@ paths:
                   $ref: '#/components/schemas/EventWID'
         '404':
           description: Events not found
-  /user/{user_id}/templates:
+  /user/{userId}/templates:
     post:
       summary: Create a new template
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -294,12 +345,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EventTemplateWID'
-        '405':
-          description: Invalid input
+        '500':
+          description: Error in event creation
     get:
       summary: Get a user's templates
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -317,18 +368,47 @@ paths:
                   $ref: '#/components/schemas/EventTemplateWID'
         '404':
           description: Templates not found
-  /user/{user_id}/templates/{template_id}:
+  /user/{userId}/templates/category/{categoryId}:
+    get:
+      summary: Get a user's templates for a specific category
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: categoryId
+          in: path
+          description: ID of category to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Templates found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventTemplateWID'
+        '404':
+          description: Templates not found
+  /user/{userId}/templates/{templateId}:
     get:
       summary: Get a template
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
           schema:
             type: integer
             format: int64
-        - name: template_id
+        - name: templateId
           in: path
           description: ID of template
           required: true
@@ -347,14 +427,14 @@ paths:
     put:
       summary: Update a template
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
           schema:
             type: integer
             format: int64
-        - name: template_id
+        - name: templateId
           in: path
           description: ID of template
           required: true
@@ -377,19 +457,17 @@ paths:
                 $ref: '#/components/schemas/EventTemplateWID'
         '404':
           description: Template not found
-        '405':
-          description: Invalid input
     delete:
       summary: Delete a template
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
           schema:
             type: integer
             format: int64
-        - name: template_id
+        - name: templateId
           in: path
           description: ID of template
           required: true
@@ -401,11 +479,11 @@ paths:
           description: Template deleted
         '404':
           description: Template not found
-  /user/{user_id}/category:
+  /user/{userId}/category:
     post:
       summary: Create a new category
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -426,12 +504,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CategoryWID'
-        '405':
+        '400':
           description: Invalid input
     get:
       summary: Get a user's categories
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user to return
           required: true
@@ -449,11 +527,11 @@ paths:
                   $ref: '#/components/schemas/CategoryWID'
         '404':
           description: Categories not found
-  /user/{user_id}/category/{category_id}:
+  /user/{userId}/category/{category_id}:
     get:
       summary: Get a category
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -479,7 +557,7 @@ paths:
     put:
       summary: Update a category
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -509,12 +587,12 @@ paths:
                 $ref: '#/components/schemas/CategoryWID'
         '404':
           description: Category not found
-        '405':
+        '400':
           description: Invalid input
     delete:
       summary: Delete a category
       parameters:
-        - name: user_id
+        - name: userId
           in: path
           description: ID of user
           required: true
@@ -533,6 +611,108 @@ paths:
           description: Category deleted
         '404':
           description: Category not found
+  /user/{userId}/acceptFriend:
+    post:
+      summary: Accept a friend request
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Id of the user who sent the request
+        required: true
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+      responses:
+        '200':
+          description: Friend added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '404':
+          description: Request not found
+  /user/{userId}/declineFriend:
+    post:
+      summary: Decline a friend request
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Id of the user who sent the request
+        required: true
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+      responses:
+        '200':
+          description: Friend request declined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserWID'
+        '404':
+          description: Request not found
+  /user/{userId}/friendRequests:
+    get:
+      summary: Get a user's friend requests
+      parameters:
+        - name: userId
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Friend requests found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWID'
+        '404':
+          description: Friend requests not found
+  /userNames:
+    post:
+      summary: Get a list of users with a name like the "search" field in the body
+      requestBody:
+        description: Search object that needs to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "Mich"
+              description: The string to match the names with using the "like" sql operator
+      responses:
+        '200':
+          description: Users found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWID'
+        '404':
+          description: User not found
+  
     
 components:
   schemas:
@@ -549,10 +729,10 @@ components:
           description: Mod de passe de l'utilisateur
           example: 444719
     UserWID:
-      required: [User_ID,Nom]
+      required: [userId,Nom]
       type: object
       properties:
-        User_ID:
+        userId:
           type: integer
           description: the user ID.
           example: 3
@@ -561,10 +741,10 @@ components:
           description: Nom de l'utilisateur
           example: Michael Jackson
     Event:
-      required: [User_ID, Weight, Name, Date, Category_ID]
+      required: [userId, Weight, Name, Date, Category_ID]
       type: object
       properties:
-        User_ID:
+        userId:
           type: integer
           description: the user ID.
           example: 3
@@ -585,14 +765,14 @@ components:
           description: poids de l'event
           example: 2
     EventWID:
-      required: [Event_ID, User_ID, Weight, Name, Date, Category_ID]
+      required: [Event_ID, userId, Weight, Name, Date, Category_ID]
       type: object
       properties:
         Event_ID:
           type: integer
           description: the event ID.
           example: 3
-        User_ID:
+        userId:
           type: integer
           description: the user ID.
           example: 3
@@ -613,10 +793,10 @@ components:
           description: poids de l'event
           example: 2
     EventTemplate:
-      required: [User_ID, ProposedWeight, Name, Category_ID]
+      required: [userId, ProposedWeight, Name, Category_ID]
       type: object
       properties:
-        User_ID:
+        userId:
           type: integer
           description: the user ID.
           example: 3
@@ -629,10 +809,10 @@ components:
           description: id de la Category
           example: 2
     EventTemplateWID:
-      required: [User_ID, ProposedWeight, Name, Category_ID, Template_ID]
+      required: [userId, ProposedWeight, Name, Category_ID, templateId]
       type: object
       properties:
-        User_ID:
+        userId:
           type: integer
           description: the user ID.
           example: 3
@@ -644,7 +824,7 @@ components:
           type: integer
           description: id de la Category
           example: 2
-        Template_ID:
+        templateId:
           type: integer
           description: id du template
           example: 2
