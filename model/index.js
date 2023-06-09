@@ -5,6 +5,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+//import models
 db.User = require('./userModel.js');
 db.Event = require('./eventModel.js');
 db.Category = require('./categoryModel.js');
@@ -12,9 +13,8 @@ db.FriendsMap = require('./friendsMapModel.js');
 db.EventTemplate = require('./eventTemplateModel.js');
 
 
-//set relationships
 
-
+//set relationships and foreign keys
 db.Event.belongsTo(db.Category, { foreignKey: 'idcategory' });
 db.Category.hasMany(db.Event, { foreignKey: 'idcategory' });
 

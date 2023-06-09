@@ -5,7 +5,12 @@ const jwt = require("jsonwebtoken")
 const jwtKey = "my_secret_key"
 const jwtExpirySeconds = 3000
 
+/*
+Controller contains functions to handle requests regarding the user table as well as authentication logic
+*/
 
+
+// Create and Save a new User
 exports.createUser = function (req, res) {
     db.User.create({ Name: req.body.Name, passWord: req.body.passWord, Mood: 0 }).then(function (user) {
         if (user.length != 0) {
@@ -16,8 +21,9 @@ exports.createUser = function (req, res) {
     })
 }
 
+
+// Retrieve a user by its id
 function getUser(req, res) {
-    // checkLogged(function () {
     db.User.findOne({ where: { iduser: req.params.userId } }).then(function (user) {
         if (user.length != 0) {
             res.json(user);
@@ -25,18 +31,15 @@ function getUser(req, res) {
             res.sendStatus(404);
         }
     })
-    // }, req, res)
 }
 
 exports.getUser = getUser;
 
-exports.getUserByName = function (req,res){
-    console.log("feeeeeeeur------------------------------------");
-    // console.log(req);
-    // console.log(req.params);
-    console.log(req.headers);
 
+//Retrieve a user by its name
+exports.getUserByName = function (req,res){
     db.User.findOne({ where:{Name:req.params.Name}}).then(function (user){
+        console.log(user);
         if (user !== null){
             res.json(user.dataValues);
         }
@@ -47,22 +50,19 @@ exports.getUserByName = function (req,res){
 }
 
 
-//a changer, si on change rien ca return not found
+//Update a user identified by its id
 exports.updateUser = function (req, res) {
-    // checkLogged(function () {
     db.User.update({ Name: req.body.Name, passWord: req.body.passWord, Mood: req.body.Mood }, { where: { iduser: req.params.userId } }).then(function (result) {
         if (result == 1) {
             getUser(req, res);
         } else {
-            // res.json(result)
             res.sendStatus(404);
         }
     })
-    // }, req, res)
 }
 
+//Delete a user identified by its id
 exports.deleteUser = function (req, res) {
-    // checkLogged(function () {
     db.User.destroy({ where: { iduser: req.params.userId } }).then(function (result) {
         if (result == 1) {
             res.sendStatus(200);
@@ -70,47 +70,28 @@ exports.deleteUser = function (req, res) {
             res.sendStatus(404);
         }
     })
-    // }, req, res)
 }
 
-// exports.login = function (req, res) {
-//     db.User.findAll({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
-//         if (user.length != 0) {
-//             req.session.user = user;
-//             req.session.logged = true;
-//             res.json(user);
-//         } else {
-//             res.sendStatus(404);
-//         }
-//     })
-// }
 
-
+//Try to login a user, if successful return a token
 exports.login = function (req, res) {
-    console.log("login");
-    // console.log(req);
-    console.log(req.body);
-    db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {
-        console.log(user);
-        if (user !== null) {
-            let payload = { id: user.iduser };
+    db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {     //Check if user with the given name and password exists
+        if (user !== null) {                                                                                    //If user exists, create a token and send it to the client
+            let payload = { id: user.iduser };                                                                //The token contains the user id and is valid for 3000 seconds
             let token = jwt.sign(payload, jwtKey, {
                 algorithm: "HS256",
                 expiresIn: jwtExpirySeconds,
             })
-            console.log("token:", token);
             token = {"token": token, "maxAge": jwtExpirySeconds * 1000 };
             res.json(Object.assign({},user.dataValues, token));
-            // res.json({"token": token, "maxAge": jwtExpirySeconds * 1000 });
         } else {
             res.sendStatus(404);
         }
     })
 }
 
-
+//Retrieve the mood of a user identified by its id
 exports.getMood = function (req, res) {
-    // checkLogged(function () {
     db.User.findAll({ where: { iduser: req.params.userId } }).then(function (user) {
         if (user.length != 0) {
             res.json(user[0].Mood);
@@ -118,68 +99,52 @@ exports.getMood = function (req, res) {
             res.sendStatus(404);
         }
     })
-    // }, req, res)
 }
-// Op = require('sequelize');
-exports.getUserNames = function (req, res) {
-    // checkLogged(function () {
 
+
+//Get all the usernames that are "like" the given search string
+exports.getUserNames = function (req, res) {
     db.User.findAll({ attributes: ['Name'], where:{
         Name: {
             [db.Sequelize.Op.like]: `%${req.body.search}%`,
         }
     }}).then(function (user) {
-        console.log(user.length);
-        console.log(user[0]);
         if (user.length != 0) {
             res.json(user);
         } else {
             res.sendStatus(404);
         }
     })
-    // }, req, res)
 }
 
 
 
 
-// function checkLogged(wrapped, req, res) {
-//     if (req.session.logged == true) {
-//         const result = wrapped.apply(this, arguments);
-//         return result;
-//     }
-//     else {
-//         res.json({ error: "not logged in" });
-//     }
-// }
-
-
+//Check if a user is logged in
 function checkLogged(req, res, next) {
-    console.log("checkLogged");
-    if (typeof req.headers.authorization !== "undefined") {
-        console.log("checkLogged2");
-        let token = req.headers.authorization.split(" ")[0];
+    if (typeof req.headers.authorization !== "undefined") {     // check if token is provided
 
-        jwt.verify(token, jwtKey, (err, payload) => {
+        let token = req.headers.authorization.split(" ")[0];    // get token from header
+
+        jwt.verify(token, jwtKey, (err, payload) => {        // verify the token
             if (err) {
-                res.status(401).json({ error: "Not Authorized" });
+                res.status(401).json({ error: "Not Authorized" });  // if token is invalid, return 401
             }
             else {
-                req.user = payload; // allow to use the user id in the controller
+                req.user = payload;     // use the payload of the token to set the user id in the request (not used currently as the user id is set in the params of each request but can be used to check if the user is authorized to access a resource as the payload contains the id of the CONNECTED user) 
 
-                return next();
+                return next();          // if token is valid, continue
             }
 
         });
     }
     else{
-        res.status(401).json({error:"Not Authorized, missing token"});
+        res.status(401).json({error:"Not Authorized, missing token"});  // if token is not provided, return 401
     }
 }
 
+//Check if a user is an admin
 function checkAdmin(req, res, next) {
-    console.log(req.user);
-    console.log(req.user.id);
     db.User.findOne({ where: { iduser: req.user.id } }).then(function (user) {
         if (user.length != 0) {
             if (user.Admin) {
