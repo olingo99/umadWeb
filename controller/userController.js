@@ -5,6 +5,9 @@ const jwt = require("jsonwebtoken")
 const jwtKey = "my_secret_key"
 const jwtExpirySeconds = 3000
 
+var bcrypt = require('bcrypt');
+const salt = "$2b$10$1jJZ1Z8Z8Z8Z8Z8Z8Z8Z8Z";
+
 /*
 Controller contains functions to handle requests regarding the user table as well as authentication logic
 */
@@ -12,14 +15,33 @@ Controller contains functions to handle requests regarding the user table as wel
 
 // Create and Save a new User
 exports.createUser = function (req, res) {
-    db.User.create({ Name: req.body.Name, passWord: req.body.passWord, Mood: 0 }).then(function (user) {
-        if (user.length != 0) {
-            res.json(user);
-        } else {
-            res.sendStatus(400);
+    let password = req.body.passWord;
+
+    bcrypt.hash(password, salt, function (err, hash) {
+        if (err) {
+            return res.status(500).json({
+                error: err
+            })
+        }
+        else {
+            db.User.create({ Name: req.body.Name, passWord: hash, Mood: 0 }).then(function (user) {
+                if (user.length != 0) {
+                    res.json(user);
+                } else {
+                    res.sendStatus(400);
+                }
+            })
         }
     })
 }
+//     db.User.create({ Name: req.body.Name, passWord: req.body.passWord, Mood: 0 }).then(function (user) {
+//         if (user.length != 0) {
+//             res.json(user);
+//         } else {
+//             res.sendStatus(400);
+//         }
+//     })
+// }
 
 
 // Retrieve a user by its id
@@ -75,7 +97,19 @@ exports.deleteUser = function (req, res) {
 
 //Try to login a user, if successful return a token
 exports.login = function (req, res) {
-    db.User.findOne({ where: { Name: req.body.Name, passWord: req.body.passWord } }).then(function (user) {     //Check if user with the given name and password exists
+
+
+    let password = req.body.passWord;
+    
+    bcrypt.hash(password, salt, function (err, hash) {
+        if (err) {
+            return res.status(500).json({
+                error: err
+            })
+        }
+        else {
+            
+    db.User.findOne({ where: { Name: req.body.Name, passWord: hash} }).then(function (user) {     //Check if user with the given name and password exists
         if (user !== null) {                                                                                    //If user exists, create a token and send it to the client
             let payload = { id: user.iduser };                                                                //The token contains the user id and is valid for 3000 seconds
             let token = jwt.sign(payload, jwtKey, {
@@ -87,6 +121,8 @@ exports.login = function (req, res) {
         } else {
             res.sendStatus(404);
         }
+    })
+    }
     })
 }
 
